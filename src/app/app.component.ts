@@ -1,71 +1,65 @@
-import { RouterOutlet } from '@angular/router';
-
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-
-export interface Data {
-  _id: string;
-  name: string;
-  age: number;
-  email: string;
-  phone: string;
-  address: string;
-  balance: string;
-  isActive: boolean;
-}
-
-/** Constants used to fill up our data base. */
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth',
-];
+import { Observable } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements AfterViewInit {
+  private _httpClient = inject(HttpClient);
   displayedColumns: string[] = ['name', 'age', 'email', 'phone', 'address', 'balance', 'isActive'];
   dataSource: MatTableDataSource<Data>;
+
+  data: Data[] = [];
+  isLoadingResults = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null;
   @ViewChild(MatSort) sort: MatSort | null;
 
   constructor() {
-    const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
-
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+    this.dataSource = new MatTableDataSource(this.data);
     this.sort = null;
     this.paginator = null;
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    getData(this._httpClient)
+      .pipe(
+        tap(() => (this.isLoadingResults = true)),
+        startWith(this.data),
+        map((data) => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+
+          if (data === null) {
+            return [];
+          }
+          return data;
+        })
+      )
+      .subscribe((data) => {
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   applyFilter(event: Event) {
@@ -78,22 +72,17 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-/** Builds and returns a new Data. */
-function createNewUser(id: number): Data {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-    ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-    '.';
+export interface Data {
+  _id: string;
+  name: string;
+  age: number;
+  email: string;
+  phone: string;
+  address: string;
+  balance: string;
+  isActive: boolean;
+}
 
-  return {
-    _id: id.toString(),
-    name: name,
-    age: Math.round(Math.random() * 100),
-    email: 'asd@asd.com',
-    address: 'anywhere',
-    balance: '$3,722.51',
-    phone: '+1 (908) 583-2056',
-    isActive: true,
-  };
+function getData(_httpClient: HttpClient): Observable<Data[]> {
+  return _httpClient.get<Data[]>(`/data.json`);
 }
