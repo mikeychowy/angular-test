@@ -4,7 +4,7 @@
   "eslint.useFlatConfig": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "cSpell.words": ["testem"],
+  "cSpell.words": ["disabledinteractive", "mattooltipposition", "testem"],
   "angular-schematics.schematicsDefaultOptions": {
     "angular-*": {
       "style": "scss",

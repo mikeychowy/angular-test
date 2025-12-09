@@ -1,0 +1,43 @@
+<div role="group" class="mat-mdc-paginator">
+  <div class="mat-mdc-paginator-outer-container">
+    <div class="mat-mdc-paginator-container">
+      <div class="mat-mdc-paginator-page-size">
+        <div class="mat-mdc-paginator-page-size-label" id="mat-paginator-page-size-label-0">Items per page:</div>
+        <div class="mat-mdc-paginator-page-size-value">{{ pageSize() }}</div>
+      </div>
+
+      <div class="mat-mdc-paginator-range-actions">
+        <button
+          mat-button
+          disabled="{{ !hasPreviousPage() }}"
+          type="button"
+          mattooltipposition="above"
+          disabledinteractive=""
+          mat-ripple-loader-class-name="mat-mdc-button-ripple"
+          mat-ripple-loader-centered=""
+          tabindex="-1"
+          aria-label="Previous page"
+          class="mat-mdc-paginator-navigation-previous"
+        >
+          Previous
+        </button>
+        <div aria-live="polite" class="mat-mdc-paginator-range-label">
+          Page {{ currentPageNumber() }}/{{ pageLength() }}
+        </div>
+        <button
+          mat-button
+          disabled="{{ !hasNextPage() }}"
+          type="button"
+          mattooltipposition="above"
+          disabledinteractive=""
+          mat-ripple-loader-class-name="mat-mdc-button-ripple"
+          mat-ripple-loader-centered=""
+          tabindex="0"
+          aria-label="Next page"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
