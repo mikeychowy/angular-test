@@ -7,7 +7,14 @@
   "cSpell.words": ["testem"],
   "angular-schematics.schematicsDefaultOptions": {
     "angular-*": {
-      "style": "scss"
+      "style": "scss",
+      "externalTemplate": true
+    },
+    "angular-component": {
+      "skipChangeDetectionOnPush": true
+    },
+    "angular-page": {
+      "skipChangeDetectionOnPush": true
     }
   },
   "[html]": {
