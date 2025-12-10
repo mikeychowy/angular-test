@@ -50,8 +50,6 @@
         <td class="mat-cell" colspan="4">No data matching the filter "{{ input.value }}"</td>
       </tr>
     </table>
-
-    <app-button-paginator dataLength="{{ dataLength() }}" pageSize="10"></app-button-paginator>
     <mat-paginator [pageSizeOptions]="[10]" aria-label="Page Limit"></mat-paginator>
   </div>
 </main>

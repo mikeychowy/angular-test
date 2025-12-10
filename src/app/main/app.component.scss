@@ -23,19 +23,19 @@ th {
 }
 
 /* Column Widths */
+
 .mat-column-age {
-  width: 3rem;
+  width: 5%;
 }
 
-.mat-column-name,
 .mat-column-email,
 .mat-column-phone,
+.mat-column-name,
 .mat-column-balance,
 .mat-column-isActive {
-  width: 6rem;
+  width: 15%;
 }
 
 .mat-column-address {
-  justify-items: center;
-  width: 9rem;
+  width: 6rem;
 }
